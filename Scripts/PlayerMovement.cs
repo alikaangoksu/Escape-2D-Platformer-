@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityStandardAssets.CrossPlatformInput;
+[RequireComponent(typeof(AudioSource))]
 public class PlayerMovement : MonoBehaviour
 {
+    public AudioSource firstAudioClip;
+    public AudioSource secondAudioClip;
     [SerializeField] float MoveSpeed = 5f;
     [SerializeField] float JumpSpeed = 5f;
     [SerializeField] float ClimbSpeed = 5f;
@@ -14,9 +17,13 @@ public class PlayerMovement : MonoBehaviour
     CapsuleCollider2D myBodyCollider;
     BoxCollider2D myStep;
     float climbGravity;
+    
 
     void Start()
     {
+       AudioSource[] audio  = GetComponents<AudioSource>();
+        firstAudioClip = audio[0];
+        secondAudioClip = audio[1];
         myRigidBody = GetComponent<Rigidbody2D>();
         myAnimator = GetComponent<Animator>();
         myBodyCollider = GetComponent<CapsuleCollider2D>();
@@ -55,7 +62,9 @@ public class PlayerMovement : MonoBehaviour
         if (CrossPlatformInputManager.GetButtonDown("Jump"))
         {
             Vector2 jumpVelocity = new Vector2(0f, JumpSpeed);
+            secondAudioClip.Play();
             myRigidBody.velocity += jumpVelocity;
+            
         }
     }
     private void Climb()
@@ -77,10 +86,12 @@ public class PlayerMovement : MonoBehaviour
     {
         if(myBodyCollider.IsTouchingLayers(LayerMask.GetMask("Enemy","Hazards")))
         {
+            firstAudioClip.Play();
             isAlive = false;
             myAnimator.SetTrigger("Died");
-            GetComponent<Rigidbody2D>().velocity = DeathJump;
+           // GetComponent<Rigidbody2D>().velocity = DeathJump;
             FindObjectOfType<GameSession>().PlayerDeath();
+            
         }
     }
     private void FlipSprite()
