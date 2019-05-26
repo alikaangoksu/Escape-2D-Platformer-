@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public class GameSession : MonoBehaviour
 {
     [SerializeField] float dieDelay = 0.3f;
-    [SerializeField] int liveCounter = 3;
+    [SerializeField] int liveCounter = 1;
     [SerializeField] int score = 0;
     public static int deathCounter = 0;
     [SerializeField] Text scoreText;
